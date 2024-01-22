@@ -67,11 +67,11 @@ export const Navbar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <MenuItem key={"Sign Up"} onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Sign Up</Typography>
-              </MenuItem>
               <MenuItem key={"Log In"} onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">Log In</Typography>
+              </MenuItem>
+              <MenuItem key={"Sign Up"} onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">Sign Up</Typography>
               </MenuItem>
               <MenuItem key={"Run Simulation"} onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">Run Simulation</Typography>
@@ -100,20 +100,21 @@ export const Navbar = () => {
           </Typography>
 
           <Stack direction='row' spacing={2} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Button
+              key={"Log In"}
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: 'black', display: 'block', '&:hover': { bgcolor: 'black', color: 'white' } }}
+              variant="text"
+            >
+              Log In
+            </Button>
+
             <Button
               key={"Sign Up"}
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'black', display: 'block', '&:hover': { bgcolor: 'black', color: 'white' } }}
             >
               Sign Up
-            </Button>
-
-            <Button
-              key={"Log In"}
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: 'black', display: 'block', '&:hover': { bgcolor: 'black', color: 'white' } }}
-            >
-              Log In
             </Button>
 
             <Button

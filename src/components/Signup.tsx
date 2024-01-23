@@ -1,9 +1,38 @@
 import { Box, Button, Container, CssBaseline, Grid, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 
-function Signup() {
+function SignUp() {
+    const [user, setUser] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''});
+
+    const [passwordMatch, setPasswordMatch] = useState(true);
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        console.log("Submitted!");
+        event.preventDefault();
+
+        if (user.password !== user.confirmPassword) {
+            setPasswordMatch(false);
+            return;
+        }
     };
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setUser({
+            ...user,
+            [name]: value,
+        });
+
+        setPasswordMatch(
+            (name === 'password' && user.confirmPassword === value) ||
+            (name === 'confirmPassword' && user.password === value)
+          );
+    };
+
   return (
     <Container content="main" maxWidth="xs">
         <CssBaseline />
@@ -14,6 +43,8 @@ function Signup() {
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                     <TextField
+                        value={user.firstName}
+                        onChange={handleChange}
                         autoComplete="given-name"
                         name="firstName"
                         required
@@ -25,6 +56,8 @@ function Signup() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
+                        value={user.lastName}
+                        onChange={handleChange}
                         autoComplete="family-name"
                         name="lastName"
                         required
@@ -35,6 +68,8 @@ function Signup() {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        value={user.email}
+                        onChange={handleChange}
                         autoComplete="email"
                         name="email"
                         required
@@ -45,6 +80,8 @@ function Signup() {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        value={user.password}
+                        onChange={handleChange}
                         autoComplete="current-password"
                         name="password"
                         required
@@ -52,6 +89,22 @@ function Signup() {
                         id="password"
                         label="Password"
                         type="password"
+                        error={!passwordMatch}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        value={user.confirmPassword}
+                        onChange={handleChange}
+                        autoComplete="new-password"
+                        name="confirmPassword"
+                        required
+                        fullWidth
+                        id="confirmPassword"
+                        label="Confirm Password"
+                        type="password"
+                        error={!passwordMatch}
+                        helperText={!passwordMatch && 'Passwords do not match.'}
                     />
                 </Grid>
             </Grid>
@@ -61,11 +114,11 @@ function Signup() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 >
-                Sign In
+                Sign Up
             </Button>
         </Box>
     </Container>
   )
 }
 
-export default Signup
+export default SignUp

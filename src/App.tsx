@@ -1,17 +1,14 @@
-import { Container, ThemeProvider, Typography } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
 import { Navbar } from "./components/Navbar";
-import SignIn from "./components/SignIn";
-import Signup from "./components/Signup";
+import { Home } from "@mui/icons-material";
 
 function App() {
   return(
     <>
     <ThemeProvider theme={ theme }>
     <Navbar />
-      <Container sx={{ bgcolor: "tomato", height: "100vh" }}>
-        <Signup />
-      </Container>
+      <Home />
     </ThemeProvider>
     </>
   );

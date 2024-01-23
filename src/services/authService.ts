@@ -1,10 +1,21 @@
-import { Auth, UserCredential, createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../firebase";
 
-const auth: Auth = getAuth();
+interface UserData {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+}
 
-export const signUp =async (email: string, password: string): Promise<UserCredential> => {
+export const signUp = async ({ email, password, firstName, lastName }: UserData ): Promise<UserCredential> => {
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+
+        await updateProfile(userCredential.user, {
+            displayName: `${firstName} ${lastName}`,
+        });
+
         return userCredential;
     } catch (error) {
         console.error('Error signing up:', error);
@@ -12,7 +23,7 @@ export const signUp =async (email: string, password: string): Promise<UserCreden
     }
 }
 
-export const signIn =async (email: string, password: string): Promise<UserCredential> => {
+export const signIn = async (email: string, password: string): Promise<UserCredential> => {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         return userCredential;
@@ -22,7 +33,7 @@ export const signIn =async (email: string, password: string): Promise<UserCreden
     }
 }
 
-export const signOut =async (): Promise<void> => {
+export const signOut = async (): Promise<void> => {
     try {
         await signOut();
     } catch (error) {

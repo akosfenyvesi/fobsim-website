@@ -1,22 +1,30 @@
 import { Box, Button, Container, CssBaseline, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { signUp } from "../services/authService";
 
 function SignUp() {
     const [user, setUser] = useState({
-        firstName: '',
-        lastName: '',
         email: '',
         password: '',
+        firstName: '',
+        lastName: '',
         confirmPassword: ''});
 
     const [passwordMatch, setPasswordMatch] = useState(true);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (user.password !== user.confirmPassword) {
-            setPasswordMatch(false);
+        if (user.password !== user.confirmPassword)
             return;
+
+        try {
+            const { email, password, firstName, lastName } = user;
+            const userCredential = await signUp({ email, password, firstName, lastName });
+
+            console.log('User signed up:', userCredential.user);
+        } catch (error) {
+            console.error('Signup error:', error);
         }
     };
 
@@ -39,7 +47,7 @@ function SignUp() {
         <Typography component="h1" variant="h5">
             Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component="form" onSubmit={handleSignUp} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                     <TextField
@@ -121,4 +129,4 @@ function SignUp() {
   )
 }
 
-export default SignUp
+export default SignUp;

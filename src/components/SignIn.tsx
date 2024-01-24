@@ -1,13 +1,32 @@
 
 import { Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, Link, TextField, Typography } from '@mui/material'
+import { useState } from 'react';
+import { signIn } from '../services/authService';
 
 function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [user, setUser] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password')
+    
+    try {
+      const { email, password } = user;
+      const userCredential = await signIn(email, password);
+
+      console.log('User signed in:', userCredential.user);
+    } catch (error) {
+      console.error('Sign-in eror:', error)
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setUser({
+      ...user,
+      [name]: value,
     });
   };
   
@@ -17,8 +36,10 @@ function SignIn() {
     <Typography component="h1" variant="h5">
         Sign in
     </Typography>
-    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+    <Box component="form" onSubmit={handleSignIn} sx={{ mt: 1 }}>
         <TextField
+          value={user.email}
+          onChange={handleChange}
           margin="normal"
           required
           fullWidth
@@ -29,6 +50,8 @@ function SignIn() {
           autoFocus
         />
         <TextField
+          value={user.password}
+          onChange={handleChange}
           margin="normal"
           required
           fullWidth
@@ -67,4 +90,4 @@ function SignIn() {
   )
 }
 
-export default SignIn
+export default SignIn;

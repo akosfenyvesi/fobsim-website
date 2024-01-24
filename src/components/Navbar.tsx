@@ -101,15 +101,16 @@ export const Navbar = () => {
 
           <Stack direction='row' spacing={2} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
           <Button
-              key={"Log In"}
+              href="/signin"
+              key={"Sign In"}
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'black', display: 'block', '&:hover': { bgcolor: 'black', color: 'white' } }}
-              variant="text"
             >
               Log In
             </Button>
 
             <Button
+            href="/signup"
               key={"Sign Up"}
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'black', display: 'block', '&:hover': { bgcolor: 'black', color: 'white' } }}
@@ -118,6 +119,7 @@ export const Navbar = () => {
             </Button>
 
             <Button
+              href="/simulation"
               key={"Run Simulation"}
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'black', display: 'block', '&:hover': { bgcolor: 'black', color: 'white' } }}

@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect, PropsWithChildren } from "react";
 import { auth } from "../firebase";
-import { User, UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { User, UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { UserData } from "../@types/user";
 
 export type ContextType = {
     currentUser: User | null;
     signUp: (userData: UserData) => Promise<UserCredential>;
+    signIn: (email: string, password: string) => Promise<UserCredential>;
 };
 
 const AuthContext = React.createContext<ContextType| undefined>(undefined);
@@ -48,6 +49,15 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
         }
     }
 
+    const logOut = async (): Promise<void> => {
+        try {
+            await signOut(auth);
+        } catch (error) {
+            console.error('Error signing out:', error);
+            throw error;
+        }
+    }
+
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user);
@@ -59,7 +69,8 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
 
     const value: ContextType = {
         currentUser,
-        signUp
+        signUp,
+        signIn
     }
 
   return (

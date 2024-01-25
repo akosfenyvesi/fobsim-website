@@ -1,4 +1,4 @@
-import { Box, Button, Container, CssBaseline, Grid, LinearProgress, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, CssBaseline, Grid, LinearProgress, Link, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { useAuthContext } from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
@@ -146,6 +146,9 @@ function SignUp() {
             </Button>
             {loading && <LinearProgress />}
             </Box>
+            <Link href="/login" variant="body2">
+              {"Already have an account? Log in!"}
+            </Link>
         </Box>
     </Container>
   )

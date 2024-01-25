@@ -67,13 +67,13 @@ export const Navbar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <MenuItem key={"Log In"} onClick={handleCloseNavMenu}>
+              <MenuItem key={"Log In"} href="/login" onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">Log In</Typography>
               </MenuItem>
-              <MenuItem key={"Sign Up"} onClick={handleCloseNavMenu}>
+              <MenuItem key={"Sign Up"} href="/signup" onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">Sign Up</Typography>
               </MenuItem>
-              <MenuItem key={"Run Simulation"} onClick={handleCloseNavMenu}>
+              <MenuItem key={"Run Simulation"} href="/simulation" onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">Run Simulation</Typography>
               </MenuItem>
             </Menu>
@@ -101,8 +101,8 @@ export const Navbar = () => {
 
           <Stack direction='row' spacing={2} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
           <Button
-              href="/signin"
-              key={"Sign In"}
+              href="/login"
+              key={"Log In"}
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'black', display: 'block', '&:hover': { bgcolor: 'black', color: 'white' } }}
             >

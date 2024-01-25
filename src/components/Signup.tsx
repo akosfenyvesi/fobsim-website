@@ -1,8 +1,10 @@
-import { Box, Button, Container, CssBaseline, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, CssBaseline, Grid, LinearProgress, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { signUp } from "../services/authService";
+import { useAuthContext } from "../contexts/authContext";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
+    const navigate = useNavigate();
     const [user, setUser] = useState({
         email: '',
         password: '',
@@ -11,6 +13,10 @@ function SignUp() {
         confirmPassword: ''});
 
     const [passwordMatch, setPasswordMatch] = useState(true);
+    const [isValidEmail, setIsValidEmail] = useState(true);
+    const [loading, setLoading] = useState(false);
+
+    const { signUp, currentUser } = useAuthContext();
 
     const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -19,12 +25,15 @@ function SignUp() {
             return;
 
         try {
+            setLoading(true);
             const { email, password, firstName, lastName } = user;
             const userCredential = await signUp({ email, password, firstName, lastName });
 
             console.log('User signed up:', userCredential.user);
         } catch (error) {
             console.error('Signup error:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -35,10 +44,17 @@ function SignUp() {
             [name]: value,
         });
 
-        setPasswordMatch(
-            (name === 'password' && user.confirmPassword === value) ||
-            (name === 'confirmPassword' && user.password === value)
-          );
+        if (name === 'password')
+            setPasswordMatch(value === user.confirmPassword);
+
+        if (name === 'confirmPassword')
+            setPasswordMatch(value === user.password);
+
+        if (name === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isValid = emailRegex.test(value);
+            setIsValidEmail(isValid);
+        }
     };
 
   return (
@@ -84,6 +100,8 @@ function SignUp() {
                         fullWidth
                         id="email"
                         label="Email Address"
+                        error={!isValidEmail}
+                        helperText={!isValidEmail && 'Not a valid email address.'}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -116,14 +134,18 @@ function SignUp() {
                     />
                 </Grid>
             </Grid>
+            <Box>
             <Button
+                disabled={loading}
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3}}
                 >
                 Sign Up
             </Button>
+            {loading && <LinearProgress />}
+            </Box>
         </Box>
     </Container>
   )

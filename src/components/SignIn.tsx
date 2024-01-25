@@ -1,24 +1,31 @@
 
-import { Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, Link, TextField, Typography } from '@mui/material'
+import { Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, LinearProgress, Link, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { signIn } from '../services/authService';
+import { useAuthContext } from '../contexts/authContext';
 
 function SignIn() {
   const [user, setUser] = useState({
     email: '',
     password: ''
   });
+  const [isValidEmail, setIsValidEmail] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const { signIn } = useAuthContext();
 
   const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
     try {
+      setLoading(true);
       const { email, password } = user;
       const userCredential = await signIn(email, password);
 
       console.log('User signed in:', userCredential.user);
     } catch (error) {
       console.error('Sign-in eror:', error)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,13 +73,15 @@ function SignIn() {
           label="Remember me"
         />
         <Button
+          disabled={loading}
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ mt: 3, mb: 2 }}
+          sx={{ mt: 3}}
         >
           Log In
         </Button>
+        {loading && <LinearProgress />}
         <Grid container>
           <Grid item xs>
             <Link href="#" variant="body2">

@@ -1,6 +1,6 @@
 
 import { Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, LinearProgress, Link, TextField, Typography } from '@mui/material';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuthContext } from '../contexts/authContext';
 
@@ -10,6 +10,7 @@ function SignIn() {
     password: ''
   });
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const { signIn } = useAuthContext();
 
@@ -19,9 +20,8 @@ function SignIn() {
     try {
       setLoading(true);
       const { email, password } = user;
-      const userCredential = await signIn(email, password);
-
-      console.log('User signed in:', userCredential.user);
+      await signIn(email, password);
+      navigate("/dashboard");
     } catch (error) {
       console.error('Sign-in eror:', error)
     } finally {

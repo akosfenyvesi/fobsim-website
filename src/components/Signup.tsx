@@ -1,5 +1,5 @@
 import { Box, Button, Container, CssBaseline, Grid, LinearProgress, Link, TextField, Typography } from "@mui/material";
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { useAuthContext } from "../contexts/authContext";
 
@@ -14,6 +14,7 @@ function SignUp() {
     const [passwordMatch, setPasswordMatch] = useState(true);
     const [isValidEmail, setIsValidEmail] = useState(true);
     const [loading, setLoading] = useState(false);
+    const navigte = useNavigate();
 
     const { signUp } = useAuthContext();
 
@@ -25,10 +26,8 @@ function SignUp() {
 
         try {
             setLoading(true);
-            const { email, password, firstName, lastName } = user;
-            const userCredential = await signUp({ email, password, firstName, lastName });
-
-            console.log('User signed up:', userCredential.user);
+            await signUp(user);
+            navigte("/dashboard");
         } catch (error) {
             console.error('Signup error:', error);
         } finally {

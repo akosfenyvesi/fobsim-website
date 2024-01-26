@@ -3,6 +3,7 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import RunSimulation from './RunSimulation';
 import Home from './Home';
+import Dashboard from './Dashboard';
 
 function AppRouter() {
   return (
@@ -12,6 +13,7 @@ function AppRouter() {
           <Route path="/login" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/simulation" element={<RunSimulation />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </Router>
   )

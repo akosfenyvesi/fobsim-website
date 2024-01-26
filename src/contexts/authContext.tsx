@@ -7,6 +7,7 @@ export type ContextType = {
     currentUser: User | null;
     signUp: (userData: UserData) => Promise<UserCredential>;
     signIn: (email: string, password: string) => Promise<UserCredential>;
+    logOut: () => Promise<void>;
 };
 
 const AuthContext = React.createContext<ContextType| undefined>(undefined);
@@ -70,7 +71,8 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
     const value: ContextType = {
         currentUser,
         signUp,
-        signIn
+        signIn,
+        logOut
     }
 
   return (

@@ -1,5 +1,6 @@
 
 import { Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, LinearProgress, Link, TextField, Typography } from '@mui/material';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuthContext } from '../contexts/authContext';
 
@@ -8,7 +9,6 @@ function SignIn() {
     email: '',
     password: ''
   });
-  const [isValidEmail, setIsValidEmail] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const { signIn } = useAuthContext();
@@ -89,7 +89,7 @@ function SignIn() {
             </Link>
           </Grid>
           <Grid item>
-            <Link href="/login" variant="body2">
+            <Link component={ReactRouterLink} to="/signup" variant="body2">
               {"Don't have an account? Sign Up"}
             </Link>
           </Grid>

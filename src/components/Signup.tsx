@@ -1,10 +1,9 @@
 import { Box, Button, Container, CssBaseline, Grid, LinearProgress, Link, TextField, Typography } from "@mui/material";
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { useState } from "react";
 import { useAuthContext } from "../contexts/authContext";
-import { useNavigate } from "react-router-dom";
 
 function SignUp() {
-    const navigate = useNavigate();
     const [user, setUser] = useState({
         email: '',
         password: '',
@@ -16,7 +15,7 @@ function SignUp() {
     const [isValidEmail, setIsValidEmail] = useState(true);
     const [loading, setLoading] = useState(false);
 
-    const { signUp, currentUser } = useAuthContext();
+    const { signUp } = useAuthContext();
 
     const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -146,7 +145,7 @@ function SignUp() {
             </Button>
             {loading && <LinearProgress />}
             </Box>
-            <Link href="/login" variant="body2">
+            <Link component={ReactRouterLink} to="/login" variant="body2">
               {"Already have an account? Log in!"}
             </Link>
         </Box>

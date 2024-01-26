@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
 
     const logOut = async (): Promise<void> => {
         try {
-            await signOut(auth);
+            return await signOut(auth);
         } catch (error) {
             console.error('Error signing out:', error);
             throw error;

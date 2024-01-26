@@ -4,10 +4,12 @@ import SignUp from './SignUp';
 import RunSimulation from './RunSimulation';
 import Home from './Home';
 import Dashboard from './Dashboard';
+import { PropsWithChildren } from 'react';
 
-function AppRouter() {
+const AppRouter = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Router>
+        { children }
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<SignIn />} />

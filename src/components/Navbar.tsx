@@ -1,10 +1,16 @@
 import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
 import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Typography } from "@mui/material"
 import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useAuthContext } from '../contexts/authContext';
+import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const { currentUser, logOut } = useAuthContext();
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -12,6 +18,24 @@ export const Navbar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget)
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleLogOut = async () => {
+    try {
+      await logOut();
+      handleCloseUserMenu();
+      navigate("/login");
+    } catch (error) {
+      console.error('Log out eror:', error)
+    }
   };
 
   return (
@@ -127,6 +151,38 @@ export const Navbar = () => {
               Run Simulation
             </Button>
           </Stack>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar alt={currentUser?.displayName ?? ""} />
+            </IconButton>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem key="Profile" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Profile</Typography>
+              </MenuItem>
+              <MenuItem key="Settings" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Settings</Typography>
+              </MenuItem>
+              <MenuItem key="Log Out" onClick={handleLogOut}>
+                <Typography textAlign="center">Log Out</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
     
         </Toolbar>
       </Container>

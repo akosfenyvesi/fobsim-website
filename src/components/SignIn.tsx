@@ -84,7 +84,7 @@ function SignIn() {
         {loading && <LinearProgress />}
         <Grid container>
           <Grid item xs>
-            <Link href="#" variant="body2">
+            <Link component={ReactRouterLink} to="/forgot-password" variant="body2">
               Forgot password?
             </Link>
           </Grid>

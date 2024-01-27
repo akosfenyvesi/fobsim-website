@@ -6,6 +6,7 @@ import Home from './Home';
 import Dashboard from './Dashboard';
 import { PropsWithChildren } from 'react';
 import ProtectedRoute from './PrivateRoute';
+import ForgotPassword from './ForgotPassword';
 
 const AppRouter = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -15,6 +16,7 @@ const AppRouter = ({ children }: PropsWithChildren<{}>) => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/simulation" element={<ProtectedRoute outlet={<RunSimulation />} />} />
           <Route path="/dashboard" element={<ProtectedRoute outlet={<Dashboard />} />} />
         </Routes>

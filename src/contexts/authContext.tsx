@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, PropsWithChildren } from "react";
 import { auth } from "../firebase";
-import { User, UserCredential, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { User, UserCredential, confirmPasswordReset, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { UserData } from "../@types/user";
 
 export type ContextType = {
@@ -8,7 +8,8 @@ export type ContextType = {
     signUp: (userData: UserData) => Promise<UserCredential>;
     signIn: (email: string, password: string) => Promise<UserCredential>;
     logOut: () => Promise<void>;
-    resetPassword: (email: string) => Promise<void>;
+    sendResetPasswordEmail: (email: string) => Promise<void>;
+    confirmResetPassword: (oobCode: string, newPassword: string) => Promise<void>;
 };
 
 const AuthContext = React.createContext<ContextType| undefined>(undefined);
@@ -57,12 +58,16 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
         }
     };
 
-    const resetPassword = async (email: string): Promise<void> => {
+    const sendResetPasswordEmail = async (email: string): Promise<void> => {
         try {
             return await sendPasswordResetEmail(auth, email);
         } catch (error) {
             throw error;
         }
+    };
+
+    const confirmResetPassword = async (oobCode: string, newPassword: string): Promise<void> => {
+        return await confirmPasswordReset(auth, oobCode, newPassword);
     };
 
     useEffect(() => {
@@ -79,7 +84,8 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
         signUp,
         signIn,
         logOut,
-        resetPassword
+        sendResetPasswordEmail,
+        confirmResetPassword
     };
 
   return (

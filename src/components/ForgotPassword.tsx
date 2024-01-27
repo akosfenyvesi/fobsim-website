@@ -12,7 +12,7 @@ function ForgotPassword() {
 
   const { sendResetPasswordEmail } = useAuthContext();
 
-  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
     try {
@@ -35,7 +35,7 @@ function ForgotPassword() {
     <Typography component="h1" variant="h5">
         Reset Your Password
     </Typography>
-        <Box component="form" onSubmit={handleSignIn} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             {message && <Alert severity="success">{message}</Alert>}
             {error && <Alert severity="error">{error}</Alert>}
             <TextField

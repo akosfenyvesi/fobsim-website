@@ -18,7 +18,7 @@ function SignUp() {
 
     const { signUp } = useAuthContext();
 
-    const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         if (user.password !== user.confirmPassword)
@@ -61,7 +61,7 @@ function SignUp() {
         <Typography component="h1" variant="h5">
             Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSignUp} sx={{ mt: 3 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                     <TextField

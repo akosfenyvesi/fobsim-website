@@ -14,7 +14,7 @@ function SignIn() {
 
   const { signIn } = useAuthContext();
 
-  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
     try {
@@ -43,7 +43,7 @@ function SignIn() {
     <Typography component="h1" variant="h5">
         Log In
     </Typography>
-    <Box component="form" onSubmit={handleSignIn} sx={{ mt: 1 }}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <TextField
           value={user.email}
           onChange={handleChange}

@@ -36,7 +36,6 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
     
             return userCredential;
         } catch (error) {
-            console.error('Error signing up:', error);
             throw error;
         }
     };
@@ -46,7 +45,6 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             return userCredential;
         } catch (error) {
-            console.error('Error signing in:', error);
             throw error;
         }
     };
@@ -55,7 +53,6 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
         try {
             return await signOut(auth);
         } catch (error) {
-            console.error('Error signing out:', error);
             throw error;
         }
     };
@@ -64,7 +61,6 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
         try {
             return await sendPasswordResetEmail(auth, email);
         } catch (error) {
-            console.error('Error sending reset email:', error);
             throw error;
         }
     };

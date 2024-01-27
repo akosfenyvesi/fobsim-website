@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, PropsWithChildren } from "react";
 import { auth } from "../firebase";
-import { User, UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { User, UserCredential, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { UserData } from "../@types/user";
 
 export type ContextType = {
@@ -8,6 +8,7 @@ export type ContextType = {
     signUp: (userData: UserData) => Promise<UserCredential>;
     signIn: (email: string, password: string) => Promise<UserCredential>;
     logOut: () => Promise<void>;
+    resetPassword: (email: string) => Promise<void>;
 };
 
 const AuthContext = React.createContext<ContextType| undefined>(undefined);
@@ -38,7 +39,7 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
             console.error('Error signing up:', error);
             throw error;
         }
-    }
+    };
 
     const signIn = async (email: string, password: string): Promise<UserCredential> => {
         try {
@@ -48,7 +49,7 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
             console.error('Error signing in:', error);
             throw error;
         }
-    }
+    };
 
     const logOut = async (): Promise<void> => {
         try {
@@ -57,7 +58,16 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
             console.error('Error signing out:', error);
             throw error;
         }
-    }
+    };
+
+    const resetPassword = async (email: string): Promise<void> => {
+        try {
+            return await sendPasswordResetEmail(auth, email);
+        } catch (error) {
+            console.error('Error sending reset email:', error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
@@ -72,8 +82,9 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
         currentUser,
         signUp,
         signIn,
-        logOut
-    }
+        logOut,
+        resetPassword
+    };
 
   return (
     <AuthContext.Provider value={value}>

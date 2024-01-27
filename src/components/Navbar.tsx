@@ -91,12 +91,12 @@ export const Navbar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <MenuItem key={"Log In"} href="/login" onClick={handleCloseNavMenu}>
+              {!currentUser && <MenuItem key={"Log In"} href="/login" onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">Log In</Typography>
-              </MenuItem>
-              <MenuItem key={"Sign Up"} href="/signup" onClick={handleCloseNavMenu}>
+              </MenuItem>}
+              {!currentUser && <MenuItem key={"Sign Up"} href="/signup" onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">Sign Up</Typography>
-              </MenuItem>
+              </MenuItem>}
               <MenuItem key={"Run Simulation"} href="/simulation" onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">Run Simulation</Typography>
               </MenuItem>
@@ -124,23 +124,23 @@ export const Navbar = () => {
           </Typography>
 
           <Stack direction='row' spacing={2} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          <Button
+          {!currentUser && <Button
               href="/login"
               key={"Log In"}
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'black', display: 'block', '&:hover': { bgcolor: 'black', color: 'white' } }}
             >
               Log In
-            </Button>
+            </Button>}
 
-            <Button
+            {!currentUser && <Button
             href="/signup"
               key={"Sign Up"}
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'black', display: 'block', '&:hover': { bgcolor: 'black', color: 'white' } }}
             >
               Sign Up
-            </Button>
+            </Button>}
 
             <Button
               href="/simulation"
@@ -152,7 +152,7 @@ export const Navbar = () => {
             </Button>
           </Stack>
 
-          <Box sx={{ flexGrow: 0 }}>
+          {currentUser && <Box sx={{ flexGrow: 0 }}>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar alt={currentUser?.displayName ?? ""} />
             </IconButton>
@@ -182,7 +182,7 @@ export const Navbar = () => {
                 <Typography textAlign="center">Log Out</Typography>
               </MenuItem>
             </Menu>
-          </Box>
+          </Box>}
     
         </Toolbar>
       </Container>

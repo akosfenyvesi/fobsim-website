@@ -8,6 +8,7 @@ import { PropsWithChildren } from 'react';
 import ProtectedRoute from './PrivateRoute';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './PasswordReset';
+import ConfirmEmail from './ConfirmEmail';
 
 const AppRouter = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -18,6 +19,7 @@ const AppRouter = ({ children }: PropsWithChildren<{}>) => {
           <Route path="/login" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/confirm-email" element={<ConfirmEmail />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/simulation" element={<ProtectedRoute outlet={<RunSimulation />} />} />
           <Route path="/dashboard" element={<ProtectedRoute outlet={<Dashboard />} />} />

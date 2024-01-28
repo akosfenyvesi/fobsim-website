@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, PropsWithChildren } from "react";
 import { auth } from "../firebase";
-import { User, UserCredential, confirmPasswordReset, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { User, UserCredential, applyActionCode, confirmPasswordReset, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { UserData } from "../@types/user";
 
 export type ContextType = {
@@ -9,6 +9,7 @@ export type ContextType = {
     signIn: (email: string, password: string) => Promise<UserCredential>;
     logOut: () => Promise<void>;
     sendResetPasswordEmail: (email: string) => Promise<void>;
+    confirmUserEmail: (oobCode: string) => Promise<void>;
     confirmResetPassword: (oobCode: string, newPassword: string) => Promise<void>;
 };
 
@@ -66,6 +67,14 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
         }
     };
 
+    const confirmUserEmail = async (oobCode: string): Promise<void> => {
+        try {
+            return await applyActionCode(auth, oobCode);
+        } catch (error) {
+            throw error;
+        }
+    };
+
     const confirmResetPassword = async (oobCode: string, newPassword: string): Promise<void> => {
         return await confirmPasswordReset(auth, oobCode, newPassword);
     };
@@ -85,7 +94,8 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
         signIn,
         logOut,
         sendResetPasswordEmail,
-        confirmResetPassword
+        confirmUserEmail,
+        confirmResetPassword,
     };
 
   return (

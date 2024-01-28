@@ -9,6 +9,8 @@ import ProtectedRoute from './PrivateRoute';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './PasswordReset';
 import ConfirmEmail from './ConfirmEmail';
+import AuthActions from './auth-actions';
+import AuthUserActions from './AuthUserActions';
 
 const AppRouter = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -21,6 +23,7 @@ const AppRouter = ({ children }: PropsWithChildren<{}>) => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/confirm-email" element={<ConfirmEmail />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/auth/action" element={<AuthActions><AuthUserActions /></AuthActions>} />
           <Route path="/simulation" element={<ProtectedRoute outlet={<RunSimulation />} />} />
           <Route path="/dashboard" element={<ProtectedRoute outlet={<Dashboard />} />} />
         </Routes>

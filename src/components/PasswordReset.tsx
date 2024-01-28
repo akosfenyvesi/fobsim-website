@@ -29,7 +29,7 @@ function ResetPassword() {
 
         if (oobCode) {
             await confirmResetPassword(oobCode, user.password);
-            setMessage('Check your emails to reset your password!');
+            setMessage('Password changed successfully!');
         } else {
             setError('Something is wrong, try again later!')
         }

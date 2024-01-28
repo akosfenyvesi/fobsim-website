@@ -20,7 +20,7 @@ function ForgotPassword() {
         setMessage('');
         setError('');
         await sendResetPasswordEmail(email);
-        setMessage('Password changed successfully!');
+        setMessage('Check your emails to reset your password!');
     } catch (error) {
         setError('Invalid email');
         console.log('Failed to reset password:', error);

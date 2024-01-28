@@ -1,13 +1,24 @@
-
-import { Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, LinearProgress, Link, TextField, Typography } from '@mui/material';
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { useAuthContext } from '../contexts/authContext';
+import {
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  CssBaseline,
+  FormControlLabel,
+  Grid,
+  LinearProgress,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useAuthContext } from "../contexts/authContext";
 
 function SignIn() {
   const [user, setUser] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -16,14 +27,14 @@ function SignIn() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     try {
       setLoading(true);
       const { email, password } = user;
       await signIn(email, password);
       navigate("/dashboard");
     } catch (error) {
-      console.error('Sign-in eror:', error)
+      console.error("Sign-in eror:", error);
     } finally {
       setLoading(false);
     }
@@ -36,14 +47,14 @@ function SignIn() {
       [name]: value,
     });
   };
-  
+
   return (
     <Container component="main" maxWidth="xs">
-    <CssBaseline />
-    <Typography component="h1" variant="h5">
+      <CssBaseline />
+      <Typography component="h1" variant="h5">
         Log In
-    </Typography>
-    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+      </Typography>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <TextField
           value={user.email}
           onChange={handleChange}
@@ -77,14 +88,18 @@ function SignIn() {
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ mt: 3}}
+          sx={{ mt: 3 }}
         >
           Log In
         </Button>
         {loading && <LinearProgress />}
         <Grid container>
           <Grid item xs>
-            <Link component={ReactRouterLink} to="/forgot-password" variant="body2">
+            <Link
+              component={ReactRouterLink}
+              to="/forgot-password"
+              variant="body2"
+            >
               Forgot password?
             </Link>
           </Grid>
@@ -94,9 +109,9 @@ function SignIn() {
             </Link>
           </Grid>
         </Grid>
-    </Box>
-</Container>
-  )
+      </Box>
+    </Container>
+  );
 }
 
 export default SignIn;

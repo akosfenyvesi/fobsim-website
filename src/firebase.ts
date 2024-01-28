@@ -11,7 +11,7 @@ const firebaseConfig = {
   projectId: "szte-edu-research-2023",
   storageBucket: "szte-edu-research-2023.appspot.com",
   messagingSenderId: "231493636400",
-  appId: "1:231493636400:web:0134e4adbf475ed430f8f5"
+  appId: "1:231493636400:web:0134e4adbf475ed430f8f5",
 };
 
 // Initialize Firebase

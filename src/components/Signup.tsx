@@ -12,6 +12,7 @@ import {
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuthContext } from "../contexts/authContext";
+import { validateEmail } from "../utils/regexUtils";
 
 function SignUp() {
   const [user, setUser] = useState({
@@ -57,9 +58,7 @@ function SignUp() {
     if (name === "confirmPassword") setPasswordMatch(value === user.password);
 
     if (name === "email") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const isValid = emailRegex.test(value);
-      setIsValidEmail(isValid);
+      setIsValidEmail(validateEmail(value));
     }
   };
 

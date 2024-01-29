@@ -11,7 +11,7 @@ const AuthActions = ({ children }: { children: JSX.Element }) => {
 
     return <Navigate to={resetPasswordPath} replace />;
   } else if (mode === "verifyEmail") {
-    const confirmEmailPath = `/confirmEmail?oobCode=${oobCode}`;
+    const confirmEmailPath = `/confirm-email?oobCode=${oobCode}`;
 
     return <Navigate to={confirmEmailPath} replace />;
   }

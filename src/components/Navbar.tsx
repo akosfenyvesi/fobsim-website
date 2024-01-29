@@ -15,7 +15,7 @@ import {
 import AdbIcon from "@mui/icons-material/Adb";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAuthContext } from "../contexts/authContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -107,29 +107,32 @@ export const Navbar = () => {
                 }}
               >
                 {!currentUser && (
-                  <MenuItem
-                    key={"Log In"}
-                    href="/login"
-                    onClick={handleCloseNavMenu}
-                  >
-                    <Typography textAlign="center">Log In</Typography>
+                  <MenuItem key={"Log In"} onClick={handleCloseNavMenu}>
+                    <Link
+                      to="/login"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <Typography textAlign="center">Log In</Typography>
+                    </Link>
                   </MenuItem>
                 )}
                 {!currentUser && (
-                  <MenuItem
-                    key={"Sign Up"}
-                    href="/signup"
-                    onClick={handleCloseNavMenu}
-                  >
-                    <Typography textAlign="center">Sign Up</Typography>
+                  <MenuItem key={"Sign Up"} onClick={handleCloseNavMenu}>
+                    <Link
+                      to="/signup"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <Typography textAlign="center">Sign Up</Typography>
+                    </Link>
                   </MenuItem>
                 )}
-                <MenuItem
-                  key={"Run Simulation"}
-                  href="/simulation"
-                  onClick={handleCloseNavMenu}
-                >
-                  <Typography textAlign="center">Run Simulation</Typography>
+                <MenuItem key={"Run Simulation"} onClick={handleCloseNavMenu}>
+                  <Link
+                    to="/simulation"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography textAlign="center">Run Simulation</Typography>
+                  </Link>
                 </MenuItem>
               </Menu>
             </Box>
@@ -161,7 +164,6 @@ export const Navbar = () => {
             >
               {!currentUser && (
                 <Button
-                  href="/login"
                   key={"Log In"}
                   onClick={handleCloseNavMenu}
                   sx={{
@@ -171,13 +173,17 @@ export const Navbar = () => {
                     "&:hover": { bgcolor: "black", color: "white" },
                   }}
                 >
-                  Log In
+                  <Link
+                    to="/login"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    Log In
+                  </Link>
                 </Button>
               )}
 
               {!currentUser && (
                 <Button
-                  href="/signup"
                   key={"Sign Up"}
                   onClick={handleCloseNavMenu}
                   sx={{
@@ -187,12 +193,16 @@ export const Navbar = () => {
                     "&:hover": { bgcolor: "black", color: "white" },
                   }}
                 >
-                  Sign Up
+                  <Link
+                    to="/signup"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    Sign Up
+                  </Link>
                 </Button>
               )}
 
               <Button
-                href="/simulation"
                 key={"Run Simulation"}
                 onClick={handleCloseNavMenu}
                 sx={{
@@ -202,7 +212,12 @@ export const Navbar = () => {
                   "&:hover": { bgcolor: "black", color: "white" },
                 }}
               >
-                Run Simulation
+                <Link
+                  to="/simulation"
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Run Simulation
+                </Link>
               </Button>
             </Stack>
 

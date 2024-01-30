@@ -11,6 +11,7 @@ import {
   applyActionCode,
   confirmPasswordReset,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
@@ -57,6 +58,8 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
         password
       );
 
+      if (auth.currentUser) await sendEmailVerification(auth.currentUser);
+
       await updateProfile(userCredential.user, {
         displayName: `${firstName} ${lastName}`,
       });
@@ -100,6 +103,7 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
   };
 
   const confirmUserEmail = async (oobCode: string): Promise<void> => {
+    // TODO: problem here: auth/invalid-action-code
     try {
       return await applyActionCode(auth, oobCode);
     } catch (error) {
@@ -113,6 +117,8 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
   ): Promise<void> => {
     return await confirmPasswordReset(auth, oobCode, newPassword);
   };
+
+  // const updateUserProfile = async (currentUser: User, userData: UserData) => {};
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {

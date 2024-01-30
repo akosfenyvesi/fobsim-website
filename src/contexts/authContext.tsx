@@ -11,6 +11,7 @@ import {
   applyActionCode,
   confirmPasswordReset,
   createUserWithEmailAndPassword,
+  deleteUser,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -30,6 +31,7 @@ export type ContextType = {
   confirmUserEmail: (oobCode: string) => Promise<void>;
   confirmResetPassword: (oobCode: string, newPassword: string) => Promise<void>;
   updateUserProfile: (userData: UserData) => Promise<void>; // TODO return type
+  deleteAccount: () => Promise<void>;
 };
 
 const AuthContext = React.createContext<ContextType | undefined>(undefined);
@@ -145,6 +147,10 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
     }
   };
 
+  const deleteAccount = async (): Promise<void> => {
+    if (auth.currentUser) return await deleteUser(auth.currentUser);
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -163,6 +169,7 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
     confirmUserEmail,
     confirmResetPassword,
     updateUserProfile,
+    deleteAccount,
   };
 
   return (

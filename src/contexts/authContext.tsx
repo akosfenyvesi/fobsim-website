@@ -15,6 +15,7 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
+  updatePassword,
   updateProfile,
 } from "firebase/auth";
 import { UserData } from "../@types/user";
@@ -28,6 +29,7 @@ export type ContextType = {
   sendResetPasswordEmail: (email: string) => Promise<void>;
   confirmUserEmail: (oobCode: string) => Promise<void>;
   confirmResetPassword: (oobCode: string, newPassword: string) => Promise<void>;
+  updateUserProfile: (userData: UserData) => Promise<void>; // TODO return type
 };
 
 const AuthContext = React.createContext<ContextType | undefined>(undefined);
@@ -119,7 +121,29 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
     return await confirmPasswordReset(auth, oobCode, newPassword);
   };
 
-  // const updateUserProfile = async (currentUser: User, userData: UserData) => {};
+  const updateUserProfile = async (userData: UserData) => {
+    // TODO: if user signed in a long time ago, need to reauthenticate!
+    if (auth.currentUser) {
+      try {
+        if (userData.firstName && userData.lastName)
+          await updateProfile(auth.currentUser, {
+            displayName: concatenateDisplayName(
+              userData.firstName,
+              userData.lastName
+            ),
+          });
+      } catch (error) {
+        throw error;
+      }
+
+      if (userData.password)
+        try {
+          await updatePassword(auth.currentUser, userData.password);
+        } catch (error) {
+          throw error;
+        }
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -138,6 +162,7 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
     sendResetPasswordEmail,
     confirmUserEmail,
     confirmResetPassword,
+    updateUserProfile,
   };
 
   return (

@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Container,
@@ -14,9 +15,9 @@ import { useAuthContext } from "../contexts/authContext";
 import { getFirstName, getLastName } from "../utils/displayNameUtils";
 
 function Settings() {
-  const { currentUser } = useAuthContext();
+  const { currentUser, updateUserProfile } = useAuthContext();
   const [userData, setUserData] = useState({
-    email: currentUser?.email,
+    email: currentUser?.email ?? "",
     firstName: getFirstName(currentUser?.displayName),
     lastName: getLastName(currentUser?.displayName),
     password: "",
@@ -25,6 +26,8 @@ function Settings() {
 
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [isValidEmail, setIsValidEmail] = useState(true);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +37,12 @@ function Settings() {
 
     try {
       setLoading(true);
+      setMessage("");
+      setError("");
+      updateUserProfile(userData);
+      setMessage("Profile information updated successfully!");
     } catch (error) {
+      setError("Something went wrong, please try again later.");
       console.error("Something went wrong:", error);
     } finally {
       setLoading(false);
@@ -66,6 +74,8 @@ function Settings() {
         Edit Your Data
       </Typography>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        {message && <Alert severity="success">{message}</Alert>}
+        {error && <Alert severity="error">{error}</Alert>}
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -139,7 +149,7 @@ function Settings() {
             variant="contained"
             sx={{ mt: 3 }}
           >
-            Edit
+            Update Profile
           </Button>
           {loading && <LinearProgress />}
         </Box>

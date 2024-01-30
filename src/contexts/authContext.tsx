@@ -18,6 +18,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { UserData } from "../@types/user";
+import { concatenateDisplayName } from "../utils/displayNameUtils";
 
 export type ContextType = {
   currentUser: User | null;
@@ -61,7 +62,7 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
       if (auth.currentUser) await sendEmailVerification(auth.currentUser);
 
       await updateProfile(userCredential.user, {
-        displayName: `${firstName} ${lastName}`,
+        displayName: concatenateDisplayName(firstName, lastName),
       });
 
       return userCredential;

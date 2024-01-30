@@ -10,13 +10,17 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { validateEmail } from "../utils/regexUtils";
+import { MuiTelInput } from "mui-tel-input";
+import { useAuthContext } from "../contexts/authContext";
+import { getFirstName, getLastName } from "../utils/displayNameUtils";
 
 function Settings() {
+  const { currentUser } = useAuthContext();
   const [userData, setUserData] = useState({
-    email: "",
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
+    email: currentUser?.email,
+    firstName: getFirstName(currentUser?.displayName),
+    lastName: getLastName(currentUser?.displayName),
+    tel: currentUser?.phoneNumber ?? "",
     password: "",
     confirmPassword: "",
   });
@@ -39,7 +43,7 @@ function Settings() {
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = event.target;
     setUserData({
       ...userData,
@@ -57,11 +61,18 @@ function Settings() {
     }
   };
 
+  const handleTelChange = (newValue: string) => {
+    setUserData({
+      ...userData,
+      tel: newValue,
+    });
+  };
+
   return (
     <Container content="main" maxWidth="xs">
       <CssBaseline />
       <Typography component="h1" variant="h5">
-        Sign up
+        Edit Your Data
       </Typography>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
@@ -71,7 +82,6 @@ function Settings() {
               onChange={handleChange}
               autoComplete="given-name"
               name="firstName"
-              required
               fullWidth
               id="firstName"
               label="First Name"
@@ -84,7 +94,6 @@ function Settings() {
               onChange={handleChange}
               autoComplete="family-name"
               name="lastName"
-              required
               fullWidth
               id="lastName"
               label="Last Name"
@@ -96,7 +105,6 @@ function Settings() {
               onChange={handleChange}
               autoComplete="email"
               name="email"
-              required
               fullWidth
               id="email"
               label="Email Address"
@@ -105,12 +113,22 @@ function Settings() {
             />
           </Grid>
           <Grid item xs={12}>
+            <MuiTelInput
+              value={userData.tel}
+              onChange={handleTelChange}
+              autoComplete="tel"
+              name="tel"
+              fullWidth
+              id="tel"
+              label="Phone Number"
+            />
+          </Grid>
+          <Grid item xs={12}>
             <TextField
               value={userData.password}
               onChange={handleChange}
               autoComplete="current-password"
               name="password"
-              required
               fullWidth
               id="password"
               label="Password"
@@ -124,7 +142,6 @@ function Settings() {
               onChange={handleChange}
               autoComplete="new-password"
               name="confirmPassword"
-              required
               fullWidth
               id="confirmPassword"
               label="Confirm Password"
@@ -142,7 +159,7 @@ function Settings() {
             variant="contained"
             sx={{ mt: 3 }}
           >
-            Sign Up
+            Edit
           </Button>
           {loading && <LinearProgress />}
         </Box>

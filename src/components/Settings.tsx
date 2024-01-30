@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { validateEmail } from "../utils/regexUtils";
-import { MuiTelInput } from "mui-tel-input";
 import { useAuthContext } from "../contexts/authContext";
 import { getFirstName, getLastName } from "../utils/displayNameUtils";
 
@@ -20,7 +19,6 @@ function Settings() {
     email: currentUser?.email,
     firstName: getFirstName(currentUser?.displayName),
     lastName: getLastName(currentUser?.displayName),
-    tel: currentUser?.phoneNumber ?? "",
     password: "",
     confirmPassword: "",
   });
@@ -59,13 +57,6 @@ function Settings() {
     if (name === "email") {
       setIsValidEmail(validateEmail(value));
     }
-  };
-
-  const handleTelChange = (newValue: string) => {
-    setUserData({
-      ...userData,
-      tel: newValue,
-    });
   };
 
   return (
@@ -113,17 +104,6 @@ function Settings() {
             />
           </Grid>
           <Grid item xs={12}>
-            <MuiTelInput
-              value={userData.tel}
-              onChange={handleTelChange}
-              autoComplete="tel"
-              name="tel"
-              fullWidth
-              id="tel"
-              label="Phone Number"
-            />
-          </Grid>
-          <Grid item xs={12}>
             <TextField
               value={userData.password}
               onChange={handleChange}
@@ -131,7 +111,7 @@ function Settings() {
               name="password"
               fullWidth
               id="password"
-              label="Password"
+              label="New Password"
               type="password"
               error={!passwordMatch}
             />
@@ -144,7 +124,7 @@ function Settings() {
               name="confirmPassword"
               fullWidth
               id="confirmPassword"
-              label="Confirm Password"
+              label="Confirm New Password"
               type="password"
               error={!passwordMatch}
               helperText={!passwordMatch && "Passwords do not match."}

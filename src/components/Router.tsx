@@ -11,6 +11,7 @@ import ResetPassword from "./PasswordReset";
 import ConfirmEmail from "./ConfirmEmail";
 import AuthActions from "./auth-actions";
 import AuthUserActions from "./AuthUserActions";
+import Settings from "./Settings";
 
 const AppRouter = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -38,6 +39,10 @@ const AppRouter = ({ children }: PropsWithChildren<{}>) => {
         <Route
           path="/dashboard"
           element={<ProtectedRoute outlet={<Dashboard />} />}
+        />
+        <Route
+          path="/settings"
+          element={<ProtectedRoute outlet={<Settings />} />}
         />
       </Routes>
     </Router>

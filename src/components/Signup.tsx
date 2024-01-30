@@ -17,9 +17,9 @@ import { validateEmail } from "../utils/regexUtils";
 function SignUp() {
   const [user, setUser] = useState({
     email: "",
-    password: "",
     firstName: "",
     lastName: "",
+    password: "",
     confirmPassword: "",
   });
 

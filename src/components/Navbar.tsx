@@ -246,7 +246,12 @@ export const Navbar = () => {
                     <Typography textAlign="center">Profile</Typography>
                   </MenuItem>
                   <MenuItem key="Settings" onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Settings</Typography>
+                    <Link
+                      to="/settings"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <Typography textAlign="center">Settings</Typography>
+                    </Link>
                   </MenuItem>
                   <MenuItem key="Log Out" onClick={handleLogOut}>
                     <Typography textAlign="center">Log Out</Typography>

@@ -4,6 +4,7 @@ import {
   Checkbox,
   Container,
   CssBaseline,
+  Divider,
   FormControlLabel,
   Grid,
   LinearProgress,
@@ -23,7 +24,7 @@ function SignIn() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const { signIn } = useAuthContext();
+  const { signIn, signInWithGoogle } = useAuthContext();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,12 +49,31 @@ function SignIn() {
     });
   };
 
+  const loginWithGoogle = async () => {
+    try {
+      await signInWithGoogle();
+      navigate("/dashboard");
+    } catch (error) {
+      console.log("Login with Google failed:", error);
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <Typography component="h1" variant="h5">
         Log In
       </Typography>
+      <Box sx={{ mt: 1 }}>
+        <Button
+          onClick={loginWithGoogle}
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3 }}
+        >
+          Login With Google
+        </Button>
+      </Box>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <TextField
           value={user.email}

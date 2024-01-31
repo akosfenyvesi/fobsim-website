@@ -4,7 +4,7 @@ import React, {
   useEffect,
   PropsWithChildren,
 } from "react";
-import { auth } from "../firebase";
+import { auth, googleProvider } from "../firebase";
 import {
   User,
   UserCredential,
@@ -15,6 +15,7 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updatePassword,
   updateProfile,
@@ -26,6 +27,7 @@ export type ContextType = {
   currentUser: User | null;
   signUp: (userData: UserData) => Promise<UserCredential>;
   signIn: (email: string, password: string) => Promise<UserCredential>;
+  signInWithGoogle: () => Promise<UserCredential>;
   logOut: () => Promise<void>;
   sendResetPasswordEmail: (email: string) => Promise<void>;
   confirmUserEmail: (oobCode: string) => Promise<void>;
@@ -86,6 +88,14 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
         password
       );
       return userCredential;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const signInWithGoogle = async () => {
+    try {
+      return await signInWithPopup(auth, googleProvider);
     } catch (error) {
       throw error;
     }
@@ -164,6 +174,7 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
     currentUser,
     signUp,
     signIn,
+    signInWithGoogle,
     logOut,
     sendResetPasswordEmail,
     confirmUserEmail,

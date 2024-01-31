@@ -19,6 +19,7 @@ import { validateEmail } from "../utils/regexUtils";
 import { useAuthContext } from "../contexts/authContext";
 import { getFirstName, getLastName } from "../utils/displayNameUtils";
 import { useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function Settings() {
   const { currentUser, updateUserProfile, deleteAccount } = useAuthContext();
@@ -179,6 +180,7 @@ function Settings() {
                 variant="outlined"
                 color="error"
                 sx={{ mt: 3 }}
+                startIcon={<DeleteIcon />}
               >
                 Delete Profile
               </Button>

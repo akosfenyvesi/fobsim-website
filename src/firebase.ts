@@ -6,12 +6,12 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAh4spQrvJ81Uy7Jvt24mDIn9UoMHTmHVM",
-  authDomain: "szte-edu-research-2023.firebaseapp.com",
-  projectId: "szte-edu-research-2023",
-  storageBucket: "szte-edu-research-2023.appspot.com",
-  messagingSenderId: "231493636400",
-  appId: "1:231493636400:web:0134e4adbf475ed430f8f5",
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 };
 
 // Initialize Firebase

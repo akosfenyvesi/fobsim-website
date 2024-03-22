@@ -1,48 +1,73 @@
-import {
-  Box,
-  Button,
-  // FormControl,
-  // InputLabel,
-  // MenuItem,
-  // Select,
-  // Step,
-  // StepLabel,
-  // Stepper,
-} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { child, DataSnapshot, onValue, ref, get } from "firebase/database";
+import { onValue, ref } from "firebase/database";
 import { useAuthContext } from "../contexts/authContext";
 import React from "react";
-
-// const steps = ["Settings", "Simulation parameters"];
-
-// const bcFunctions = [
-//   "Data Management",
-//   "Computational services",
-//   "Payment",
-//   "Identity Management",
-// ];
-// const bcPlacements = ["Fog Layer", "End-User layer"];
-// const bcConesensuses = [
-//   "Proof of Work (PoW)",
-//   "Proof of Stake (PoS)",
-//   "Proof of Authority (PoA)",
-//   "Proof of Elapsed Time (PoET)",
-//   "Delegated Proof of Stake (DPoS)",
-// ];
-
-export type SimulationResult = {
-  message: string;
-};
+import SimulationResultsDialog from "./SimulationResultsDialog";
+import SimulationSettings from "./SimulationSettings";
+import { SimulationParameters, SimulationResult } from "../@types/simulation";
+import { getSimulationSettingsJSON } from "../utils/settingsJsonUtils";
 
 export const RunSimulation = () => {
   const { currentUser } = useAuthContext();
-  const [simulationRunning, setSimulationRunning] = useState(false);
+  const [simulation, setSimulation] = useState({
+    timestamp: new Date(0).getTime(),
+    isRunning: false,
+  });
+  const [settings, setSettings] = useState<SimulationParameters>({
+    bcFunction: "1",
+    bcPlacement: "1",
+    bcConsensus: "2",
+    aiAssistedMining: false,
+    numOfFogNodes: 2,
+    numOfUsersPerFogNode: 2,
+    numOfTaskPerUser: 2,
+    numOfMiners: 2,
+    numberOfEachMinerNeighbours: 1,
+    numOfTXperBlock: 1,
+    puzzleDifficulty: 1,
+    poetBlockTime: 1,
+    maxEnduserPayment: 100,
+    minersInitialWalletValue: 1000,
+    miningAward: 5,
+    delayBetweenFogNodes: 0,
+    delayBetweenEndUsers: 0,
+    gossipActivated: true,
+    automaticPoAMinersAuthorization: true,
+    parallelPoWmining: false,
+    asymmetricKeyLength: 512,
+    numOfDPoSdelegates: 2,
+    storPlc: 1,
+    // bcFunction: "",
+    // bcPlacement: "",
+    // bcConsensus: "",
+    // aiAssistedMining: false,
+    // numOfFogNodes: 0,
+    // numOfUsersPerFogNode: 0,
+    // numOfTaskPerUser: 0,
+    // numOfMiners: 0,
+    // numberOfEachMinerNeighbours: 0,
+    // numOfTXperBlock: 0,
+    // puzzleDifficulty: 0,
+    // poetBlockTime: 0,
+    // maxEnduserPayment: 0,
+    // minersInitialWalletValue: 0,
+    // miningAward: 0,
+    // delayBetweenFogNodes: 0,
+    // delayBetweenEndUsers: 0,
+    // gossipActivated: false,
+    // automaticPoAMinersAuthorization: false,
+    // parallelPoWmining: false,
+    // asymmetricKeyLength: 0,
+    // numOfDPoSdelegates: 0,
+    // storPlc: 0,
+  });
   const [simulationResults, setSimulationResults] = useState<
     SimulationResult[]
   >([]);
+  const uniqueMessages = new Set();
 
   const startSimulation = async () => {
     if (!currentUser) {
@@ -51,22 +76,25 @@ export const RunSimulation = () => {
     }
 
     try {
-      setSimulationRunning(true);
+      const timestamp = Date.now();
+      const simParametersJson = getSimulationSettingsJSON(settings);
+      setSimulation({
+        timestamp: timestamp,
+        isRunning: true,
+      });
       axios
         .get(
           "https://europe-north1-szte-edu-research-2023.cloudfunctions.net/run-simulation",
           {
             params: {
               uid: currentUser.uid,
-              function: "1",
-              placement: "1",
-              consensus_algorithm: "1",
-              ai_assisted_mining: "n",
+              timestamp: timestamp,
+              settings: simParametersJson,
             },
           }
         )
         .then(() => {
-          setSimulationRunning(false);
+          setSimulation((prevState) => ({ ...prevState, isRunning: false }));
         })
         .catch((error) => {
           console.error("Error starting simulation:", error);
@@ -77,88 +105,44 @@ export const RunSimulation = () => {
   };
 
   useEffect(() => {
-    const query = ref(db, `/users/${currentUser?.uid}/simulation-results`);
+    if (!simulation.isRunning) return;
+
+    const query = ref(
+      db,
+      `/fobsim/users/${currentUser?.uid}/${simulation.timestamp}/temp`
+    );
     return onValue(query, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val() || []; // Set default to empty array
         const newResults: SimulationResult[] = Object.values(data);
-        setSimulationResults((prevResults) => [...prevResults, ...newResults]);
-        console.log(simulationResults);
+
+        const uniqueNewResults = newResults.filter(
+          (result) => !uniqueMessages.has(result.message)
+        );
+
+        uniqueNewResults.forEach((result) =>
+          uniqueMessages.add(result.message)
+        );
+
+        setSimulationResults((prevResults) => [
+          ...prevResults,
+          ...uniqueNewResults,
+        ]);
       }
     });
-  }, []);
-
-  // const dbRef = ref(db);
-  // get(child(dbRef, `users/${currentUser?.uid}/simulation-results`))
-  //   .then((snapshot) => {
-  //     if (snapshot.exists()) {
-  //       console.log(snapshot.val());
-  //     } else {
-  //       console.log("No data available");
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
+  }, [simulation]);
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Button onClick={startSimulation} disabled={simulationRunning}>
-        {simulationRunning ? "Simulation Running" : "Start Simulation"}
-      </Button>
+      <SimulationSettings
+        startSimulation={startSimulation}
+        simulation={simulation}
+        settings={settings}
+        setSettings={setSettings}
+      />
       {simulationResults.length > 0 && (
-        <div>
-          <h2>Simulation Results</h2>
-          <ul>
-            {simulationResults.map((result, index) => (
-              <li key={index}>
-                {result.message &&
-                  result.message.split("\n").map((line, lineIndex) => (
-                    <React.Fragment key={`${index}-${lineIndex}`}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <SimulationResultsDialog simulationResults={simulationResults} />
       )}
-      {/* <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-        <Button
-          color="inherit"
-          disabled={activeStep === 0}
-          onClick={handleBack}
-          sx={{ mr: 1 }}
-        >
-          Back
-        </Button>
-        <Button onClick={handleNext}>
-          {activeStep === steps.length - 1 ? "Finish" : "Next"}
-        </Button>
-      </Box> */}
-
-      {/* <FormControl sx={{ m: 1, minWidth: 300 }} size="small">
-        <InputLabel id="select-function-label">
-          Function of the Blockchain network
-        </InputLabel>
-        <Select
-          labelId="select-function-label"
-          id="select-function"
-          value={bcFunction}
-        >
-          {bcFunctions.map((f) => (
-            <MenuItem value={f}>{f}</MenuItem>
-          ))}
-        </Select>
-      </FormControl> */}
     </Box>
   );
 };

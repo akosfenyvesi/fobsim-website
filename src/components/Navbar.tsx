@@ -136,6 +136,22 @@ export const Navbar = () => {
                     </Link>
                   </MenuItem>
                 )}
+
+                {currentUser && (
+                  <MenuItem
+                    key={"Previous Simulations"}
+                    onClick={handleCloseNavMenu}
+                  >
+                    <Link
+                      to="/previous-simulations"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <Typography textAlign="center">
+                        Previous Simulations
+                      </Typography>
+                    </Link>
+                  </MenuItem>
+                )}
               </Menu>
             </Box>
 
@@ -223,6 +239,26 @@ export const Navbar = () => {
                   </Link>
                 </Button>
               )}
+
+              {currentUser && (
+                <Button
+                  key={"Previous Simulations"}
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    my: 2,
+                    color: "black",
+                    display: "block",
+                    "&:hover": { bgcolor: "black", color: "white" },
+                  }}
+                >
+                  <Link
+                    to="/previous-simulations"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    Previous Simulations
+                  </Link>
+                </Button>
+              )}
             </Stack>
 
             {currentUser && (
@@ -246,9 +282,6 @@ export const Navbar = () => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  <MenuItem key="Profile" onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Profile</Typography>
-                  </MenuItem>
                   <MenuItem key="Settings" onClick={handleCloseUserMenu}>
                     <Link
                       to="/settings"

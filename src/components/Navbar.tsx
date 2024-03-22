@@ -126,14 +126,16 @@ export const Navbar = () => {
                     </Link>
                   </MenuItem>
                 )}
-                <MenuItem key={"Run Simulation"} onClick={handleCloseNavMenu}>
-                  <Link
-                    to="/simulation"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <Typography textAlign="center">Run Simulation</Typography>
-                  </Link>
-                </MenuItem>
+                {currentUser && (
+                  <MenuItem key={"Run Simulation"} onClick={handleCloseNavMenu}>
+                    <Link
+                      to="/simulation"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <Typography textAlign="center">Run Simulation</Typography>
+                    </Link>
+                  </MenuItem>
+                )}
               </Menu>
             </Box>
 
@@ -202,23 +204,25 @@ export const Navbar = () => {
                 </Button>
               )}
 
-              <Button
-                key={"Run Simulation"}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  my: 2,
-                  color: "black",
-                  display: "block",
-                  "&:hover": { bgcolor: "black", color: "white" },
-                }}
-              >
-                <Link
-                  to="/simulation"
-                  style={{ textDecoration: "none", color: "inherit" }}
+              {currentUser && (
+                <Button
+                  key={"Run Simulation"}
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    my: 2,
+                    color: "black",
+                    display: "block",
+                    "&:hover": { bgcolor: "black", color: "white" },
+                  }}
                 >
-                  Run Simulation
-                </Link>
-              </Button>
+                  <Link
+                    to="/simulation"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    Run Simulation
+                  </Link>
+                </Button>
+              )}
             </Stack>
 
             {currentUser && (

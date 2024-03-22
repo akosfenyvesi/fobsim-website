@@ -12,6 +12,7 @@ import ConfirmEmail from "./ConfirmEmail";
 import AuthActions from "./auth-actions";
 import AuthUserActions from "./AuthUserActions";
 import Settings from "./Settings";
+import PreviousSimulations from "./PreviousSimulations";
 
 const AppRouter = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -35,6 +36,10 @@ const AppRouter = ({ children }: PropsWithChildren<{}>) => {
         <Route
           path="/simulation"
           element={<ProtectedRoute outlet={<RunSimulation />} />}
+        />
+        <Route
+          path="/previous-simulations"
+          element={<ProtectedRoute outlet={<PreviousSimulations />} />}
         />
         <Route
           path="/dashboard"

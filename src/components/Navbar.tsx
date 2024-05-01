@@ -62,8 +62,8 @@ export const Navbar = () => {
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="/"
+              component={Link}
+              to="/home"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -159,8 +159,8 @@ export const Navbar = () => {
             <Typography
               variant="h5"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
+              component={Link}
+              to="/home"
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },

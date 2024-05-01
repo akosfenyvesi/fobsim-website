@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -11,25 +11,21 @@ import { SimulationResult } from "../@types/simulation";
 
 type Props = {
   simulationResults: SimulationResult[];
+  isOpen: boolean;
+  handleClose: () => void;
 };
 
-function SimulationResultsDialog(props: Props) {
-  const [open, setOpen] = useState(true);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+function SimulationResultsDialog({
+  simulationResults,
+  isOpen,
+  handleClose,
+}: Props) {
   return (
     <Dialog
       onClose={handleClose}
       maxWidth="md"
       aria-labelledby="customized-dialog-title"
-      open={open}
+      open={isOpen}
     >
       <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
         Simulation Results
@@ -47,9 +43,9 @@ function SimulationResultsDialog(props: Props) {
         <CloseIcon />
       </IconButton>
       <DialogContent dividers>
-        {props.simulationResults.map((result, index) => (
-          <Typography gutterBottom>
-            {result.message &&
+        {simulationResults.map((result, index) => (
+          <Typography gutterBottom key={index}>
+            {result &&
               result.message.split("\n").map((line, lineIndex) => (
                 <React.Fragment key={`${index}-${lineIndex}`}>
                   {line}

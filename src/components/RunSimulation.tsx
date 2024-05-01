@@ -1,14 +1,18 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { onValue, ref } from "firebase/database";
 import { useAuthContext } from "../contexts/authContext";
-import React from "react";
 import SimulationResultsDialog from "./SimulationResultsDialog";
 import SimulationSettings from "./SimulationSettings";
-import { SimulationParameters, SimulationResult } from "../@types/simulation";
-import { getSimulationSettingsJSON } from "../utils/settingsJsonUtils";
+import {
+  ExtraSimulations,
+  SimulationParameters,
+  SimulationResult,
+} from "../@types/simulation";
+import { toSimulationSettingsJSON } from "../utils/settingsJsonUtils";
+import RunMultipleSimulationsDialog from "./multipleSimulations/components/RunMultipleSimulationsDialog";
 
 export const RunSimulation = () => {
   const { currentUser } = useAuthContext();
@@ -17,6 +21,7 @@ export const RunSimulation = () => {
     isRunning: false,
   });
   const [settings, setSettings] = useState<SimulationParameters>({
+    time: new Date(0).getTime(),
     bcFunction: "1",
     bcPlacement: "1",
     bcConsensus: "2",
@@ -40,36 +45,17 @@ export const RunSimulation = () => {
     asymmetricKeyLength: 512,
     numOfDPoSdelegates: 2,
     storPlc: 1,
-    // bcFunction: "",
-    // bcPlacement: "",
-    // bcConsensus: "",
-    // aiAssistedMining: false,
-    // numOfFogNodes: 0,
-    // numOfUsersPerFogNode: 0,
-    // numOfTaskPerUser: 0,
-    // numOfMiners: 0,
-    // numberOfEachMinerNeighbours: 0,
-    // numOfTXperBlock: 0,
-    // puzzleDifficulty: 0,
-    // poetBlockTime: 0,
-    // maxEnduserPayment: 0,
-    // minersInitialWalletValue: 0,
-    // miningAward: 0,
-    // delayBetweenFogNodes: 0,
-    // delayBetweenEndUsers: 0,
-    // gossipActivated: false,
-    // automaticPoAMinersAuthorization: false,
-    // parallelPoWmining: false,
-    // asymmetricKeyLength: 0,
-    // numOfDPoSdelegates: 0,
-    // storPlc: 0,
   });
   const [simulationResults, setSimulationResults] = useState<
     SimulationResult[]
   >([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [multipleSimulatuonsDialogOpen, setMultipleSimulatuonsDialogOpen] =
+    useState(false);
   const uniqueMessages = new Set();
 
-  const startSimulation = async () => {
+  const startSimulation = async (extraSimulations?: ExtraSimulations) => {
+    setSimulationResults([]);
     if (!currentUser) {
       console.error("User not logged in.");
       return;
@@ -77,11 +63,12 @@ export const RunSimulation = () => {
 
     try {
       const timestamp = Date.now();
-      const simParametersJson = getSimulationSettingsJSON(settings);
+      const simParametersJson = toSimulationSettingsJSON(settings);
       setSimulation({
         timestamp: timestamp,
         isRunning: true,
       });
+      setDialogOpen(true);
       axios
         .get(
           "https://europe-north1-szte-edu-research-2023.cloudfunctions.net/run-simulation",
@@ -90,6 +77,9 @@ export const RunSimulation = () => {
               uid: currentUser.uid,
               timestamp: timestamp,
               settings: simParametersJson,
+              extraSimulations: extraSimulations
+                ? JSON.stringify(extraSimulations)
+                : null,
             },
           }
         )
@@ -113,7 +103,7 @@ export const RunSimulation = () => {
     );
     return onValue(query, (snapshot) => {
       if (snapshot.exists()) {
-        const data = snapshot.val() || []; // Set default to empty array
+        const data = snapshot.val() || [];
         const newResults: SimulationResult[] = Object.values(data);
 
         const uniqueNewResults = newResults.filter(
@@ -132,6 +122,22 @@ export const RunSimulation = () => {
     });
   }, [simulation]);
 
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const handleOpenMultipleSimulationsDialog = () => {
+    setMultipleSimulatuonsDialogOpen(true);
+  };
+
+  const handleCloseMultipleSimulationsDialog = () => {
+    setMultipleSimulatuonsDialogOpen(false);
+  };
+
   return (
     <Box sx={{ width: "100%" }}>
       <SimulationSettings
@@ -139,9 +145,23 @@ export const RunSimulation = () => {
         simulation={simulation}
         settings={settings}
         setSettings={setSettings}
+        reopenDialog={handleOpenDialog}
+        openMultipleSimulationsDialog={handleOpenMultipleSimulationsDialog}
       />
-      {simulationResults.length > 0 && (
-        <SimulationResultsDialog simulationResults={simulationResults} />
+      {dialogOpen && (
+        <SimulationResultsDialog
+          simulationResults={simulationResults}
+          isOpen={dialogOpen}
+          handleClose={handleCloseDialog}
+        />
+      )}
+      {multipleSimulatuonsDialogOpen && (
+        <RunMultipleSimulationsDialog
+          isOpen={multipleSimulatuonsDialogOpen}
+          handleClose={handleCloseMultipleSimulationsDialog}
+          settings={settings}
+          startSimulation={startSimulation}
+        />
       )}
     </Box>
   );

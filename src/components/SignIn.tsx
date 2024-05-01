@@ -32,7 +32,7 @@ function SignIn() {
       setLoading(true);
       const { email, password } = user;
       await signIn(email, password);
-      navigate("/dashboard");
+      navigate("/home");
     } catch (error) {
       console.error("Sign-in eror:", error);
     } finally {
@@ -51,7 +51,7 @@ function SignIn() {
   const loginWithGoogle = async () => {
     try {
       await signInWithGoogle();
-      navigate("/dashboard");
+      navigate("/home");
     } catch (error) {
       console.log("Login with Google failed:", error);
     }

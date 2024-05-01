@@ -12,6 +12,7 @@ import AuthActions from "./auth-actions";
 import AuthUserActions from "./AuthUserActions";
 import Settings from "./Settings";
 import PreviousSimulations from "./PreviousSimulations";
+import NotFound from "./NotFound";
 
 const AppRouter = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -32,6 +33,7 @@ const AppRouter = ({ children }: PropsWithChildren<{}>) => {
             </AuthActions>
           }
         />
+        <Route path="/home" element={<ProtectedRoute outlet={<Home />} />} />
         <Route
           path="/simulation"
           element={<ProtectedRoute outlet={<RunSimulation />} />}
@@ -44,6 +46,7 @@ const AppRouter = ({ children }: PropsWithChildren<{}>) => {
           path="/settings"
           element={<ProtectedRoute outlet={<Settings />} />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

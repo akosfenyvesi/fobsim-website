@@ -19,10 +19,10 @@ function ConfirmEmail() {
         confirmUserEmail(oobCode);
         setConfirmEmailSuccess(true);
       } catch (error) {
-        console.log("There was a problem with cionfirming your email:", error);
+        console.log("There was a problem with confirming your email:", error);
       }
     }
-  });
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">

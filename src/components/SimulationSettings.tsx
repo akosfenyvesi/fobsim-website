@@ -13,7 +13,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
 import { Simulation, SimulationParameters } from "../@types/simulation";
 import { CustomForm } from "../@types/form";

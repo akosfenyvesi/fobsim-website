@@ -8,6 +8,8 @@ export type Simulation = {
 };
 
 export type SimulationParameters = {
+  time: number; // todo!
+  elapsedTime?: number;
   bcFunction: string;
   bcPlacement: string;
   bcConsensus: string;
@@ -32,3 +34,26 @@ export type SimulationParameters = {
   numOfDPoSdelegates: number;
   storPlc: number;
 };
+
+export type FilesDto = {
+  temporaryfiles: string;
+};
+
+export type ExtraSimulations = {
+  name: string;
+  inputs: number[];
+};
+
+export type SimulationDto = {
+  id: number;
+  files: FilesDto;
+  settings: SimulationParameters;
+  elapsedTime: number[];
+  extraSimulations: ExtraSimulations;
+  temp: SimulationResult[];
+};
+
+interface ExtraSimulations {
+  name: string;
+  inputs: number[];
+}
